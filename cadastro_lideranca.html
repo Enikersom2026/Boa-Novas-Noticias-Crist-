@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal da Liderança - Cadastro &amp; Login da Igreja</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-3 sm:p-6 text-slate-800 selection:bg-indigo-600 selection:text-white">
+
+  <!-- CARD PRINCIPAL -->
+  <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[620px] border border-slate-800/20">
+    
+    <!-- LATERAL ESQUERDA: APRESENTAÇÃO INSTITUCIONAL -->
+    <div class="hidden md:flex md:col-span-5 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 p-8 flex-col justify-between text-white relative overflow-hidden">
+      <div class="absolute -top-24 -left-24 w-52 h-52 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-52 h-52 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center space-x-2.5 z-10">
+        <div class="w-10 h-10 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center font-bold text-xl shadow-inner">
+          ✝️
+        </div>
+        <div>
+          <span class="font-extrabold text-sm tracking-wider uppercase text-indigo-300 block">Rede Gospel</span>
+          <span class="text-[10px] text-indigo-400">Gestão Pastoral &amp; Notícias</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 z-10 my-auto py-6">
+        <h2 class="text-2xl font-black leading-tight text-white">
+          Comunique-se em tempo real com todos os seus membros.
+        </h2>
+        <p class="text-xs text-indigo-200 leading-relaxed">
+          Publique cultos, eventos, avisos e banners em carrossel exclusivos para a sua congregação local com isolamento total.
+        </p>
+      </div>
+
+      <div class="text-[11px] text-indigo-400 z-10 border-t border-indigo-900/60 pt-3 flex items-center justify-between">
+        <span>Multi-Tenant Firestore v10+</span>
+        <span>Rede Gospel &copy; 2026</span>
+      </div>
+    </div>
+
+    <!-- LATERAL DIREITA: FORMULÁRIOS (LOGIN / CADASTRO DA IGREJA) -->
+    <div class="col-span-1 md:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white">
+      
+      <!-- ABAS DE NAVEGAÇÃO ENTRE LOGIN E CADASTRO -->
+      <div class="flex border-b border-gray-200 mb-6">
+        <button id="tab-login" type="button" class="w-1/2 pb-3 font-bold text-xs sm:text-sm border-b-2 border-indigo-600 text-indigo-600 transition cursor-pointer flex items-center justify-center gap-1.5">
+          <span>🔑 Entrar no Painel</span>
+        </button>
+        <button id="tab-cadastro" type="button" class="w-1/2 pb-3 font-medium text-xs sm:text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-600 transition cursor-pointer flex items-center justify-center gap-1.5">
+          <span>🏛️ Cadastrar Nova Igreja</span>
+        </button>
+      </div>
+
+      <!-- ALERTA DE ERRO -->
+      <div id="admin-alert" class="hidden p-3 mb-4 text-xs rounded-xl border bg-red-50 border-red-200 text-red-700"></div>
+
+      <!-- 1. FORMULÁRIO DE LOGIN DE LIDERANÇA -->
+      <form id="form-login-lider" class="space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">Acesso à Secretaria / Pastoral</h3>
+          <p class="text-xs text-gray-500">Entre com as credenciais administrativas da congregação.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">E-mail do Pastor / Líder</label>
+          <input type="email" id="login-email" required placeholder="pastor@igreja.org" 
+                 class="w-full px-4 py-2.5 text-xs sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Senha</label>
+          <input type="password" id="login-senha" required placeholder="Sua senha secreta" 
+                 class="w-full px-4 py-2.5 text-xs sm:text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50/50">
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center justify-center space-x-2 cursor-pointer">
+          <span>Acessar Painel da Igreja</span>
+          <span>➔</span>
+        </button>
+      </form>
+
+      <!-- 2. FORMULÁRIO DE CADASTRO DE NOVA IGREJA & PASTOR -->
+      <form id="form-cadastro-lider" class="space-y-3.5 hidden">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">Registrar Nova Congregação</h3>
+          <p class="text-xs text-gray-500">Cadastre a igreja e a conta do pastor titular.</p>
+        </div>
+
+        <!-- Dados da Igreja -->
+        <div class="space-y-2.5 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Nome da Igreja / Denominação</label>
+            <input type="text" id="cad-igreja-nome" required placeholder="Ex: Igreja Batista Renovada - Sede" 
+                   class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700 mb-1">Cidade</label>
+              <input type="text" id="cad-igreja-cidade" required placeholder="Ex: Palmas" 
+                     class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-700 mb-1">Estado (UF)</label>
+              <input type="text" id="cad-igreja-estado" required maxlength="2" placeholder="Ex: TO" 
+                     class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 outline-none uppercase">
+            </div>
+          </div>
+        </div>
+
+        <!-- Dados do Usuário Pastor / Líder -->
+        <div class="space-y-2.5">
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Nome Completo do Pastor / Líder</label>
+            <input type="text" id="cad-lider-nome" required placeholder="Ex: Pr. Roberto Fernandes" 
+                   class="w-full px-4 py-2 text-xs sm:text-sm border border-gray-200 rounded-xl focus:ring-1 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">E-mail Administrativo</label>
+            <input type="email" id="cad-lider-email" required placeholder="pastor@email.com" 
+                   class="w-full px-4 py-2 text-xs sm:text-sm border border-gray-200 rounded-xl focus:ring-1 focus:ring-indigo-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Criar Senha de Acesso</label>
+            <input type="password" id="cad-lider-senha" required minlength="6" placeholder="Mínimo 6 dígitos" 
+                   class="w-full px-4 py-2 text-xs sm:text-sm border border-gray-200 rounded-xl focus:ring-1 focus:ring-indigo-500 outline-none">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-cad-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-2.5 rounded-xl text-xs sm:text-sm transition shadow-md flex items-center justify-center space-x-2 mt-2 cursor-pointer">
+          <span>Registrar Igreja &amp; Abrir Painel</span>
+          <span>➔</span>
+        </button>
+      </form>
+
+      <!-- LINK DE RETORNO AO APP DO MEMBRO -->
+      <div class="text-center pt-4 border-t border-gray-100 mt-4">
+        <a href="index.html" class="text-xs text-gray-500 hover:text-indigo-600 transition flex items-center justify-center gap-1">
+          <span>←</span>
+          <span>Voltar ao Aplicativo dos Irmãos</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT FIREBASE LOGIC -->
+  <script type="module">
+    import { 
+      auth, 
+      db, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      doc, 
+      setDoc, 
+      getDoc, 
+      collection, 
+      addDoc, 
+      serverTimestamp 
+    } from './js/firebase-config.js';
+
+    const tabLogin = document.getElementById('tab-login');
+    const tabCadastro = document.getElementById('tab-cadastro');
+    const formLogin = document.getElementById('form-login-lider');
+    const formCadastro = document.getElementById('form-cadastro-lider');
+    const alertBox = document.getElementById('admin-alert');
+
+    // Alternar Abas
+    tabLogin.addEventListener('click', () => {
+      tabLogin.className = 'w-1/2 pb-3 font-bold text-xs sm:text-sm border-b-2 border-indigo-600 text-indigo-600 transition cursor-pointer flex items-center justify-center gap-1.5';
+      tabCadastro.className = 'w-1/2 pb-3 font-medium text-xs sm:text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-600 transition cursor-pointer flex items-center justify-center gap-1.5';
+      formLogin.classList.remove('hidden');
+      formCadastro.classList.add('hidden');
+      alertBox.classList.add('hidden');
+    });
+
+    tabCadastro.addEventListener('click', () => {
+      tabCadastro.className = 'w-1/2 pb-3 font-bold text-xs sm:text-sm border-b-2 border-indigo-600 text-indigo-600 transition cursor-pointer flex items-center justify-center gap-1.5';
+      tabLogin.className = 'w-1/2 pb-3 font-medium text-xs sm:text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-600 transition cursor-pointer flex items-center justify-center gap-1.5';
+      formCadastro.classList.remove('hidden');
+      formLogin.classList.add('hidden');
+      alertBox.classList.add('hidden');
+    });
+
+    // 1. Submit Login da Liderança
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.classList.add('hidden');
+      const email = document.getElementById('login-email').value.trim();
+      const senha = document.getElementById('login-senha').value;
+      const btn = document.getElementById('btn-login-submit');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Verificando credenciais...</span>';
+
+      try {
+        const cred = await signInWithEmailAndPassword(auth, email, senha);
+        const userDoc = await getDoc(doc(db, 'usuarios', cred.user.uid));
+
+        if (!userDoc.exists() || userDoc.data().role !== 'admin') {
+          throw new Error('Esta conta não possui perfil administrativo de liderança.');
+        }
+
+        window.location.href = 'painel.html';
+      } catch (err) {
+        console.error(err);
+        alertBox.textContent = err.message || 'Erro ao realizar login.';
+        alertBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Acessar Painel da Igreja</span><span>➔</span>';
+      }
+    });
+
+    // 2. Submit Cadastro de Igreja & Liderança
+    formCadastro.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.classList.add('hidden');
+
+      const nomeIgreja = document.getElementById('cad-igreja-nome').value.trim();
+      const cidade = document.getElementById('cad-igreja-cidade').value.trim();
+      const estado = document.getElementById('cad-igreja-estado').value.trim().toUpperCase();
+      const nomeLider = document.getElementById('cad-lider-nome').value.trim();
+      const emailLider = document.getElementById('cad-lider-email').value.trim();
+      const senhaLider = document.getElementById('cad-lider-senha').value;
+      const btn = document.getElementById('btn-cad-submit');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Registrando igreja no Firestore...</span>';
+
+      try {
+        // Gerar ID numérico único da igreja (ex: 1042)
+        const novoIgrejaId = String(Math.floor(1000 + Math.random() * 9000));
+
+        // 1. Criar usuário no Firebase Auth
+        const cred = await createUserWithEmailAndPassword(auth, emailLider, senhaLider);
+
+        // 2. Salvar documento da Igreja no Firestore
+        await setDoc(doc(db, 'igrejas', novoIgrejaId), {
+          igreja_id: novoIgrejaId,
+          nome: nomeIgreja,
+          cidade: cidade,
+          estado: estado,
+          pastor_titular: nomeLider,
+          email_contato: emailLider,
+          createdAt: serverTimestamp()
+        });
+
+        // 3. Salvar perfil do Pastor na coleção 'usuarios' com 'role: admin' e o 'igreja_id'
+        await setDoc(doc(db, 'usuarios', cred.user.uid), {
+          uid: cred.user.uid,
+          nome: nomeLider,
+          email: emailLider,
+          role: 'admin',
+          tipo: 'lideranca',
+          igreja_id: novoIgrejaId,
+          igreja_nome: nomeIgreja,
+          createdAt: new Date().toISOString()
+        });
+
+        // 4. Inserir primeira notícia de boas-vindas na coleção
+        await addDoc(collection(db, 'noticias'), {
+          igreja_id: novoIgrejaId,
+          tipo: 'noticia',
+          titulo: `Seja bem-vindo à ${nomeIgreja}!`,
+          conteudo: 'Este é o canal oficial de notícias e eventos da nossa congregação. Acompanhe nossos comunicados e cultos.',
+          imagem_url: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?w=800',
+          destaque_carrossel: true,
+          autor_id: cred.user.uid,
+          autor_nome: nomeLider,
+          createdAt: serverTimestamp()
+        });
+
+        window.location.href = 'painel.html';
+
+      } catch (err) {
+        console.error(err);
+        alertBox.textContent = err.message || 'Erro ao registrar igreja.';
+        alertBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Registrar Igreja &amp; Abrir Painel</span><span>➔</span>';
+      }
+    });
+  </script>
+</body>
+</html>

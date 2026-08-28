@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f9fafb;
+    color: #1f2937;
+  }
+
+  /* Ensure all inputs, textareas and selects have high contrast and explicit dark text */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  textarea,
+  select {
+    color: #111827;
+    background-color: #ffffff;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+  }
+
+  /* Dark themed inputs override */
+  .dark input,
+  .dark textarea,
+  .dark select,
+  input.bg-slate-950,
+  input.bg-slate-900,
+  textarea.bg-slate-950,
+  textarea.bg-slate-900 {
+    color: #ffffff !important;
+    background-color: #020617 !important;
+  }
+
+  input.bg-slate-950::placeholder,
+  input.bg-slate-900::placeholder,
+  textarea.bg-slate-950::placeholder,
+  textarea.bg-slate-900::placeholder {
+    color: #64748b !important;
+  }
+}
+
+/* Custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "description": "Regras de Segurança Multi-Tenant do Firestore para o Console do Firebase",
+    "firestore_rules_text": "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    function getUserProfile() {\n      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data;\n    }\n\n    match /igrejas/{igrejaId} {\n      allow read: if true;\n      allow create: if request.auth != null;\n      allow update, delete: if request.auth != null && getUserProfile().igreja_id == igrejaId && getUserProfile().role == 'admin';\n    }\n\n    match /usuarios/{userId} {\n      allow read: if request.auth != null;\n      allow create, update: if request.auth != null && request.auth.uid == userId;\n      allow delete: if false;\n    }\n\n    match /noticias/{noticiaId} {\n      allow read: if request.auth != null && (resource == null || getUserProfile().igreja_id == resource.data.igreja_id);\n      allow create: if request.auth != null && getUserProfile().role == 'admin' && request.resource.data.igreja_id == getUserProfile().igreja_id;\n      allow update, delete: if request.auth != null && getUserProfile().role == 'admin' && resource.data.igreja_id == getUserProfile().igreja_id;\n    }\n  }\n}"
+  }
+}

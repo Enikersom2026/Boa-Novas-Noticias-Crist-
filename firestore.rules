@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Coleção de Igrejas (Perfis institucionais, horários de cultos, chave PIX)
+    match /churches/{churchId} {
+      allow read, write: if true;
+    }
+
+    // Coleção de Membros cadastrados
+    match /members/{memberId} {
+      allow read, write: if true;
+    }
+
+    // Coleção de Notícias, Avisos e Eventos da Igreja
+    match /posts/{postId} {
+      allow read, write: if true;
+    }
+
+    // Coleção de Notificações Push e Avisos para os Membros
+    match /notifications/{notifId} {
+      allow read, write: if true;
+    }
+
+    // Coleção de Pedidos de Oração e Intercessões da Comunidade
+    match /prayers/{prayerId} {
+      allow read, write: if true;
+    }
+
+    // Regras para coleções legadas / retrocompatibilidade
+    match /igrejas/{igrejaId} {
+      allow read, write: if true;
+    }
+
+    match /usuarios/{userId} {
+      allow read, write: if true;
+    }
+
+    match /noticias/{noticiaId} {
+      allow read, write: if true;
+    }
+  }
+}
+

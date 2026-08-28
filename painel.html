@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel da Liderança - Rede Gospel</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 min-h-screen text-slate-100 selection:bg-indigo-600 selection:text-white">
+
+  <!-- TOPO / NAVBAR -->
+  <header class="bg-slate-950/90 border-b border-slate-800 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      
+      <!-- LOGO & IGREJA INFO -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-indigo-600/30">
+          ✝️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="admin-igreja" class="font-extrabold text-sm sm:text-base text-white">Carregando Igreja...</h1>
+            <span id="admin-igreja-id" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-700/50">
+              #...
+            </span>
+          </div>
+          <p id="admin-nome" class="text-xs text-slate-400">Pastor / Líder</p>
+        </div>
+      </div>
+
+      <!-- AÇÕES -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <a href="index.html" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition border border-slate-700 flex items-center gap-1">
+          <span>📱</span>
+          <span class="hidden sm:inline">Ver App do Membro</span>
+        </a>
+        <button id="btn-admin-logout" class="px-3 py-1.5 bg-red-950/60 hover:bg-red-900/80 text-red-300 rounded-xl text-xs font-semibold transition border border-red-800/60 cursor-pointer flex items-center gap-1">
+          <span>🚪</span>
+          <span>Sair</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- CONTEÚDO DO PAINEL -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+    
+    <!-- METRICAS DA CONGREGAÇÃO -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 shadow-md">
+        <span class="text-xs font-semibold text-slate-400">Total de Publicações</span>
+        <h3 id="count-noticias" class="text-2xl font-black text-white mt-1">0</h3>
+      </div>
+      <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 shadow-md">
+        <span class="text-xs font-semibold text-purple-400">Em Destaque (Carrossel)</span>
+        <h3 id="count-destaques" class="text-2xl font-black text-purple-300 mt-1">0</h3>
+      </div>
+      <div class="col-span-2 sm:col-span-1 bg-slate-950 p-4 rounded-2xl border border-slate-800 shadow-md">
+        <span class="text-xs font-semibold text-emerald-400">Isolamento Multi-Tenant</span>
+        <h3 class="text-xs font-bold text-emerald-300 mt-2 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Sincronização Ativa</span>
+        </h3>
+      </div>
+    </div>
+
+    <!-- GRID: FORMULÁRIO DE ENVIO E LISTA -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- FORMULÁRIO DE NOVA NOTÍCIA / EVENTO -->
+      <div class="lg:col-span-5 bg-slate-950 p-5 sm:p-6 rounded-3xl border border-slate-800 shadow-xl">
+        <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+          <h2 class="font-bold text-sm sm:text-base text-white flex items-center gap-2">
+            <span>✍️</span>
+            <span>Nova Publicação</span>
+          </h2>
+          <span class="text-[10px] bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-800/80">
+            Firestore v10+
+          </span>
+        </div>
+
+        <form id="form-publicacao" class="space-y-3.5">
+          
+          <!-- Tipo -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Tipo de Publicação</label>
+            <select id="input-tipo" class="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-indigo-500">
+              <option value="noticia">📢 Notícia / Comunicado</option>
+              <option value="evento">📅 Culto Especial / Evento</option>
+            </select>
+          </div>
+
+          <!-- Título -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Título</label>
+            <input type="text" id="input-titulo" required placeholder="Ex: Grande Culto de Celebração" 
+                   class="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-indigo-500">
+          </div>
+
+          <!-- Conteúdo -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Conteúdo / Mensagem</label>
+            <textarea id="input-conteudo" required rows="3" placeholder="Descreva os detalhes para a congregação..." 
+                      class="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-indigo-500 resize-none"></textarea>
+          </div>
+
+          <!-- Imagem URL -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">URL da Imagem de Capa</label>
+            <input type="url" id="input-imagem" placeholder="https://exemplo.com/imagem.jpg" 
+                   class="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-indigo-500">
+          </div>
+
+          <!-- Campos extras caso seja Evento -->
+          <div id="campos-evento" class="hidden space-y-2.5 p-3 bg-slate-900/80 rounded-xl border border-slate-800">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-400 mb-1">Data</label>
+                <input type="date" id="input-data-evento" class="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white outline-none">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-400 mb-1">Horário</label>
+                <input type="time" id="input-horario-evento" class="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-400 mb-1">Local</label>
+              <input type="text" id="input-local-evento" placeholder="Ex: Templo Principal / Sala de Jovens" 
+                     class="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white outline-none">
+            </div>
+          </div>
+
+          <!-- Destaque no Carrossel -->
+          <div class="flex items-center space-x-2 pt-1">
+            <input type="checkbox" id="input-destaque" class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+            <label for="input-destaque" class="text-xs text-slate-300 font-medium cursor-pointer">
+              Exibir no Carrossel Principal do App dos Membros ⭐
+            </label>
+          </div>
+
+          <!-- Botão Salvar -->
+          <button type="submit" id="btn-submit-post" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-600/30">
+            <span>Publicar Notícia / Evento</span>
+            <span>➔</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- LISTA DE PUBLICAÇÕES ATIVAS DA IGREJA -->
+      <div class="lg:col-span-7 bg-slate-950 p-5 sm:p-6 rounded-3xl border border-slate-800 shadow-xl flex flex-col">
+        <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+          <h2 class="font-bold text-sm sm:text-base text-white flex items-center gap-2">
+            <span>📰</span>
+            <span>Publicações da Sua Congregação</span>
+          </h2>
+          <span class="text-xs text-slate-400">Tempo Real (onSnapshot)</span>
+        </div>
+
+        <div id="lista-publicacoes" class="space-y-3 flex-1 overflow-y-auto max-h-[520px] pr-1">
+          <!-- Carregado via js/admin.js -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- LÓGICA DO PAINEL -->
+  <script type="module" src="./js/admin.js"></script>
+</body>
+</html>

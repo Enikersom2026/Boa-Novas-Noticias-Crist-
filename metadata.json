@@ -1,0 +1,8 @@
+{
+  "name": "Boas Novas App",
+  "description": "Sistema integrado com dois ambientes: Painel Administrativo Pastoral (publicações, perfil, gestão de pedidos de oração e disparo de notificações push) e Aplicativo dos Membros com alertas em tempo real de eventos e notícias.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
