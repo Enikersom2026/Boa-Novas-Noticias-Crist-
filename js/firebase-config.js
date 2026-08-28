@@ -25,17 +25,19 @@ import {
   serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Configuração do projeto Firebase
+// Configuração do projeto Firebase (carregada dinamicamente via window ou ambiente)
+const runtimeConfig = (typeof window !== 'undefined' && (window.__FIREBASE_CONFIG__ || window.FIREBASE_CONFIG)) || {};
+
 export const firebaseConfig = {
-  apiKey: "AIzaSyA2EnnKHSVxq1o2HjDMNLqgZKqEnITgTro",
-  authDomain: "boas-novas-app-98892.firebaseapp.com",
-  projectId: "boas-novas-app-98892",
-  storageBucket: "boas-novas-app-98892.firebasestorage.app",
-  messagingSenderId: "584345895636",
-  appId: "1:584345895636:web:c02a6c4783095a751e3141"
+  apiKey: runtimeConfig.apiKey || "",
+  authDomain: runtimeConfig.authDomain || "boas-novas-app-98892.firebaseapp.com",
+  projectId: runtimeConfig.projectId || "boas-novas-app-98892",
+  storageBucket: runtimeConfig.storageBucket || "boas-novas-app-98892.firebasestorage.app",
+  messagingSenderId: runtimeConfig.messagingSenderId || "584345895636",
+  appId: runtimeConfig.appId || "1:584345895636:web:c02a6c4783095a751e3141"
 };
 
-export const FIRESTORE_DATABASE_ID = "ai-studio-boasnovasapp-1e18ad7d-79ac-4d0b-8501-c11040abfdcd";
+export const FIRESTORE_DATABASE_ID = runtimeConfig.firestoreDatabaseId || "ai-studio-boasnovasapp-1e18ad7d-79ac-4d0b-8501-c11040abfdcd";
 
 // Inicialização das instâncias
 export const app = initializeApp(firebaseConfig);
